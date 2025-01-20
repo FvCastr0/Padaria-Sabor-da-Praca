@@ -1,3 +1,4 @@
+import supplierRoutes from "@routes/supplier-routes";
 import cors from "cors";
 import dotenv from "dotenv";
 import express, { Express } from "express";
@@ -9,21 +10,19 @@ class App {
   app: Express;
   constructor() {
     this.app = express();
-    this.routes();
     this.middlewares();
+    this.routes();
   }
 
   middlewares() {
-    this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
     this.app.use(helmet());
     this.app.use(cors());
   }
 
   routes() {
-    this.app.use("/", (req: express.Request, res: express.Response) => {
-      res.status(200).send({ msg: "Olá" });
-    });
+    this.app.use("/supplier", supplierRoutes);
   }
 }
 
