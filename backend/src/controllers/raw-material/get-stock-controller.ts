@@ -1,13 +1,12 @@
 import { serviceTemplate } from "@entities/service-template";
-import { SupplierService } from "@services/supplier-service";
+import { RawMaterialService } from "@services/raw-material-service";
 import Express from "express";
 
-export class FindSupplierController {
+export class GetStockController {
   static execute: any;
   async execute(req: Express.Request, res: Express.Response) {
-    const { name } = req.params;
     try {
-      const service = new SupplierService().findSupplier(name);
+      const service = new RawMaterialService().getStock();
       await serviceTemplate({ res, service });
     } catch (e) {
       res.status(500).send({ msg: "Internal server errro.", e });

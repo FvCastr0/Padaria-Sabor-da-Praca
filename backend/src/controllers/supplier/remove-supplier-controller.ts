@@ -1,3 +1,4 @@
+import { serviceTemplate } from "@entities/service-template";
 import { SupplierService } from "@services/supplier-service";
 import Express from "express";
 
@@ -6,14 +7,8 @@ export class RemoveSupplierController {
   async execute(req: Express.Request, res: Express.Response) {
     const { id } = req.params;
     try {
-      await new SupplierService()
-        .removeSupplier(Number(id))
-        .then(req => {
-          res.status(req.status).send({ msg: req.msg, data: req.data });
-        })
-        .catch(e => {
-          res.status(400).send({ msg: "Something went wrong", data: e });
-        });
+      const service = new SupplierService().removeSupplier(Number(id));
+      await serviceTemplate({ res, service });
     } catch (e) {
       res.status(500).send({ msg: "Internal server errro.", e });
     }

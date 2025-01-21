@@ -1,11 +1,12 @@
-import { Supplier } from "@entities/supplier";
+import { serviceTemplate } from "@entities/service-template";
+import { SupplierProps } from "@entities/supplier";
 import { SupplierService } from "@services/supplier-service";
 import Express from "express";
 
 export class AddSupplierController {
   static execute: any;
   async execute(req: Express.Request, res: Express.Response) {
-    const { name, contact } = req.body as Supplier;
+    const { name, contact, id } = req.body as SupplierProps;
 
     try {
       if (name.length <= 0 && contact.length <= 0) {
@@ -13,17 +14,13 @@ export class AddSupplierController {
         return;
       }
 
-      await new SupplierService()
-        .addSupplier({
-          name,
-          contact
-        })
-        .then(req => {
-          res.status(req.status).send({ msg: req.msg, data: req.data });
-        })
-        .catch(e => {
-          res.status(400).send({ msg: "Something went wrong", data: e });
-        });
+      const service = new SupplierService().addSupplier({
+        name,
+        contact,
+        id
+      });
+
+      await serviceTemplate({ res, service });
     } catch (e) {
       res.status(500).send({ msg: "Internal server errro.", e });
     }

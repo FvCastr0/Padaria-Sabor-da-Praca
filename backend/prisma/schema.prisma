@@ -8,28 +8,30 @@ datasource db {
 }
 
 model Supplier {
-  id         Int      @id @default(autoincrement())
-  name       String
-  contact    String
-  created_at DateTime @default(now())
-  stock      Stock[]
+  id           Int           @id @default(autoincrement())
+  name         String
+  contact      String
+  created_at   DateTime      @default(now())
+  raw_material RawMaterial[]
 }
 
-model Stock {
+model Product {
+  id           Int           @id @default(autoincrement())
+  name         String        @unique
+  value        Int
+  raw_material RawMaterial[] @relation("ProductStock")
+}
+
+model RawMaterial {
   id         Int       @id @default(autoincrement())
   name       String    @unique
   value      Float
   stock      Int
   min_stock  Int
-  supplier   Supplier  @relation(fields: [supplierId], references: [id])
   supplierId Int
   created_at DateTime  @default(now())
+  supplier   Supplier  @relation(fields: [supplierId], references: [id])
   products   Product[] @relation("ProductStock")
-}
 
-model Product {
-  id           Int     @id @default(autoincrement())
-  name         String  @unique
-  value        Int
-  raw_material Stock[] @relation("ProductStock")
+  @@index([supplierId], map: "Stock_supplierId_fkey")
 }

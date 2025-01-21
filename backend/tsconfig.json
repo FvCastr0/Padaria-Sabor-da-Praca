@@ -25,7 +25,7 @@
       "@services/*": ["./src/services/*"],
       "@entities/*": ["./src/entities/*"],
       "@repository/*": ["./src/repository/*"],
-      "@test/*": ["./test/*"]
+      "@factory-functions/*": ["./src/factory-functions/*"]
     }
   }
 }

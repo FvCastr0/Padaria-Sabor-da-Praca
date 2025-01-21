@@ -1,8 +1,8 @@
+import { internalError } from "@entities/errors/internalError";
 import { ResponseData } from "@entities/response-data";
 import { SupplierProps } from "@entities/supplier";
 import { PrismaClient } from "@prisma/client";
 import { SupplierRepository } from "@repository/supplier-repository";
-import { internalError } from "@test/factory-functions/internalError";
 
 export class SupplierService implements SupplierRepository {
   private supplier = new PrismaClient().supplier;
@@ -14,7 +14,7 @@ export class SupplierService implements SupplierRepository {
           name: true,
           contact: true,
           id: true,
-          stock: true
+          raw_material: true
         }
       });
       return {
@@ -23,7 +23,7 @@ export class SupplierService implements SupplierRepository {
         data: suppliers
       };
     } catch (e) {
-      return internalError();
+      return internalError(e);
     }
   }
 
@@ -34,7 +34,7 @@ export class SupplierService implements SupplierRepository {
           name: true,
           id: true,
           contact: true,
-          stock: true
+          raw_material: true
         },
         where: {
           name
@@ -54,7 +54,7 @@ export class SupplierService implements SupplierRepository {
         data: supplier
       };
     } catch (e) {
-      return internalError();
+      return internalError(e);
     }
   }
 
@@ -84,7 +84,7 @@ export class SupplierService implements SupplierRepository {
         data: null
       };
     } catch (e) {
-      return internalError();
+      return internalError(e);
     }
   }
 
@@ -93,12 +93,9 @@ export class SupplierService implements SupplierRepository {
     contact: string
   ): Promise<ResponseData<null>> {
     try {
-      const supplier = await this.supplier.update({
+      const supplier = await this.supplier.findFirst({
         where: {
           id
-        },
-        data: {
-          contact
         }
       });
 
@@ -109,13 +106,22 @@ export class SupplierService implements SupplierRepository {
           data: null
         };
 
+      await this.supplier.update({
+        where: {
+          id
+        },
+        data: {
+          contact
+        }
+      });
+
       return {
-        msg: "Fornecedor carregado.",
+        msg: "Contato do fornecedor atualizado.",
         status: 200,
         data: null
       };
     } catch (e) {
-      return internalError();
+      return internalError(e);
     }
   }
 
@@ -126,7 +132,7 @@ export class SupplierService implements SupplierRepository {
           id
         },
         select: {
-          stock: true
+          raw_material: true
         }
       });
 
@@ -137,7 +143,7 @@ export class SupplierService implements SupplierRepository {
           data: null
         };
 
-      if (supplier.stock.length > 0)
+      if (supplier.raw_material.length > 0)
         return {
           msg: "Você não deve ter nenhum item no estoque atrelado ao fornecedor",
           status: 400,
@@ -156,7 +162,7 @@ export class SupplierService implements SupplierRepository {
         data: null
       };
     } catch (e) {
-      return internalError();
+      return internalError(e);
     }
   }
 }
