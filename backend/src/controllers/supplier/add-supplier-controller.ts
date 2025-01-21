@@ -3,6 +3,7 @@ import { SupplierService } from "@services/supplier-service";
 import Express from "express";
 
 export class AddSupplierController {
+  static execute: any;
   async execute(req: Express.Request, res: Express.Response) {
     const { name, contact } = req.body as Supplier;
 

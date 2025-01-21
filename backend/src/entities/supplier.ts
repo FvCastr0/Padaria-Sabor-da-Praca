@@ -4,7 +4,7 @@ export interface SupplierProps {
 }
 
 export class Supplier {
-  private _id: string;
+  private _id: number;
   private _name: string;
   private _contact: string;
   private _createdAt: Date;

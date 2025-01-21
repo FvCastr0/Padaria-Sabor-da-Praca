@@ -1,5 +1,5 @@
-export interface ResponseData {
+export interface ResponseData<T> {
   msg: string;
   status: number;
-  data: object;
+  data: T;
 }
