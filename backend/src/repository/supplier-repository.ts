@@ -9,4 +9,8 @@ export abstract class SupplierRepository {
   abstract getAllSuppliers(): Promise<ResponseData<SupplierProps[]>>;
   abstract findSupplier(name: string): Promise<ResponseData<SupplierProps>>;
   abstract removeSupplier(id: number): Promise<ResponseData<null>>;
+  abstract updateSupplierContact(
+    id: number,
+    contact: string
+  ): Promise<ResponseData<null>>;
 }

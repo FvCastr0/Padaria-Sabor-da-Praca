@@ -9,11 +9,48 @@ export class SupplierService implements SupplierRepository {
 
   async getAllSuppliers(): Promise<ResponseData<SupplierProps[]>> {
     try {
-      const suppliers = await this.supplier.findMany();
+      const suppliers = await this.supplier.findMany({
+        select: {
+          name: true,
+          contact: true,
+          id: true
+        }
+      });
       return {
         msg: "Todos os fornecedores foram carregados",
         status: 200,
         data: suppliers
+      };
+    } catch (e) {
+      return internalError();
+    }
+  }
+
+  async findSupplier(name: string): Promise<ResponseData<SupplierProps>> {
+    try {
+      const supplier = await this.supplier.findFirst({
+        select: {
+          name: true,
+          id: true,
+          contact: true,
+          stock: true
+        },
+        where: {
+          name
+        }
+      });
+
+      if (!supplier)
+        return {
+          msg: "Esse fornecedor não foi encontrado.",
+          status: 404,
+          data: null
+        };
+
+      return {
+        msg: "Fornecedor carregado.",
+        status: 200,
+        data: supplier
       };
     } catch (e) {
       return internalError();
@@ -25,6 +62,14 @@ export class SupplierService implements SupplierRepository {
     contact
   }: SupplierProps): Promise<ResponseData<null>> {
     try {
+      const findSupplier = await this.findSupplier(name);
+      if (findSupplier.status === 200)
+        return {
+          msg: "Esse fornecedor já existe",
+          status: 400,
+          data: null
+        };
+
       await this.supplier.create({
         data: {
           name,
@@ -42,11 +87,59 @@ export class SupplierService implements SupplierRepository {
     }
   }
 
-  findSupplier(name: string): Promise<ResponseData<SupplierProps>> {
-    throw new Error("Method not implemented.");
+  async updateSupplierContact(
+    id: number,
+    contact: string
+  ): Promise<ResponseData<null>> {
+    try {
+      const supplier = await this.supplier.update({
+        where: {
+          id
+        },
+        data: {
+          contact
+        }
+      });
+
+      if (!supplier)
+        return {
+          msg: "Esse fornecedor não foi encontrado.",
+          status: 404,
+          data: null
+        };
+
+      return {
+        msg: "Fornecedor carregado.",
+        status: 200,
+        data: null
+      };
+    } catch (e) {
+      return internalError();
+    }
   }
 
-  removeSupplier(id: number): Promise<ResponseData<null>> {
-    throw new Error("Method not implemented.");
+  async removeSupplier(id: number): Promise<ResponseData<null>> {
+    try {
+      const supplier = await this.supplier.delete({
+        where: {
+          id
+        }
+      });
+
+      if (!supplier)
+        return {
+          msg: "Esse fornecedor não foi encontrado.",
+          status: 404,
+          data: null
+        };
+
+      return {
+        msg: "Fornecedor deletado.",
+        status: 200,
+        data: null
+      };
+    } catch (e) {
+      return internalError();
+    }
   }
 }
