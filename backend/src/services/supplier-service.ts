@@ -13,7 +13,8 @@ export class SupplierService implements SupplierRepository {
         select: {
           name: true,
           contact: true,
-          id: true
+          id: true,
+          stock: true
         }
       });
       return {
@@ -120,9 +121,12 @@ export class SupplierService implements SupplierRepository {
 
   async removeSupplier(id: number): Promise<ResponseData<null>> {
     try {
-      const supplier = await this.supplier.delete({
+      const supplier = await this.supplier.findFirst({
         where: {
           id
+        },
+        select: {
+          stock: true
         }
       });
 
@@ -132,6 +136,19 @@ export class SupplierService implements SupplierRepository {
           status: 404,
           data: null
         };
+
+      if (supplier.stock.length > 0)
+        return {
+          msg: "Você não deve ter nenhum item no estoque atrelado ao fornecedor",
+          status: 400,
+          data: null
+        };
+
+      await this.supplier.delete({
+        where: {
+          id
+        }
+      });
 
       return {
         msg: "Fornecedor deletado.",
