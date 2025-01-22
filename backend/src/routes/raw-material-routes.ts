@@ -13,7 +13,7 @@ router.get("/", async (req: Express.Request, res: Express.Response) => {
   await new GetStockController().execute(req, res);
 });
 
-router.get("/:id", async (req: Express.Request, res: Express.Response) => {
+router.get("/find/:id", async (req: Express.Request, res: Express.Response) => {
   await new FindRawMaterialController().execute(req, res);
 });
 

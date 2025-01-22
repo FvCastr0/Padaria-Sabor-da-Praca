@@ -35,7 +35,7 @@ export class RawMaterialService implements RawMaterialRepository {
 
   async findRawMaterial(id: number): Promise<ResponseData<RawMaterialProps>> {
     try {
-      const rawMaterial = await this.rawMaterial.findFirst({
+      const rawMaterial = await this.rawMaterial.findUnique({
         where: { id },
         select: { ...this.selectRawMaterialProps }
       });
@@ -46,8 +46,6 @@ export class RawMaterialService implements RawMaterialRepository {
           status: 404,
           data: null
         };
-
-      if ([rawMaterial].length > 1) throw new Error();
 
       return {
         msg: "Materia prima carregada com sucesso",

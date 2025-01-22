@@ -11,9 +11,12 @@ router.get("/", async (req: Express.Request, res: Express.Response) => {
   await new GetAllSuppliersController().execute(req, res);
 });
 
-router.get("/:name", async (req: Express.Request, res: Express.Response) => {
-  await new FindSupplierController().execute(req, res);
-});
+router.get(
+  "/find/:name",
+  async (req: Express.Request, res: Express.Response) => {
+    await new FindSupplierController().execute(req, res);
+  }
+);
 
 router.post("/new", async (req: Express.Request, res: Express.Response) => {
   await new AddSupplierController().execute(req, res);

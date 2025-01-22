@@ -1,3 +1,4 @@
+import productRoutes from "@routes/product-routes";
 import rawMaterialRoutes from "@routes/raw-material-routes";
 import supplierRoutes from "@routes/supplier-routes";
 import cors from "cors";
@@ -25,6 +26,7 @@ class App {
   routes() {
     this.app.use("/supplier", supplierRoutes);
     this.app.use("/rawMaterial", rawMaterialRoutes);
+    this.app.use("/product", productRoutes);
   }
 }
 
