@@ -1,3 +1,4 @@
+import rawMaterialRoutes from "@routes/raw-material-routes";
 import supplierRoutes from "@routes/supplier-routes";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -23,6 +24,7 @@ class App {
 
   routes() {
     this.app.use("/supplier", supplierRoutes);
+    this.app.use("/rawMaterial", rawMaterialRoutes);
   }
 }
 

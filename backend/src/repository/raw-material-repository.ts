@@ -1,5 +1,6 @@
 import { RawMaterialProps } from "@entities/raw-material";
 import { ResponseData } from "@entities/response-data";
+import { SupplierProps } from "@entities/supplier";
 
 export abstract class RawMaterialRepository {
   abstract getStock(): Promise<ResponseData<RawMaterialProps[]>>;
@@ -11,17 +12,18 @@ export abstract class RawMaterialRepository {
     value,
     supplier
   }: RawMaterialProps): Promise<ResponseData<null>>;
-  abstract addRawMaterialStock({
-    id,
-    stock
-  }: RawMaterialProps): Promise<ResponseData<null>>;
+
+  abstract addRawMaterialStock(
+    id: number,
+    stock: number
+  ): Promise<ResponseData<null>>;
   abstract removeRawMaterial(id: number): Promise<ResponseData<null>>;
-  abstract updateRawMaterialValue({
-    id,
-    value
-  }: RawMaterialProps): Promise<ResponseData<null>>;
-  abstract updateRawMaterialSupplier({
-    id,
-    supplier
-  }: RawMaterialProps): Promise<ResponseData<null>>;
+  abstract updateRawMaterialValue(
+    id: number,
+    value: number
+  ): Promise<ResponseData<null>>;
+  abstract updateRawMaterialSupplier(
+    id: number,
+    supplier: SupplierProps
+  ): Promise<ResponseData<null>>;
 }

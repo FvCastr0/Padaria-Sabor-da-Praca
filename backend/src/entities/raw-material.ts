@@ -1,7 +1,7 @@
 import { SupplierProps } from "./supplier";
 
 export interface RawMaterialProps {
-  id: number;
+  id?: number;
   name: string;
   value: number;
   stock: number;
