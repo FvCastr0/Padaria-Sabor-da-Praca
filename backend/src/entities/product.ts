@@ -1,4 +1,3 @@
-// Assuming this is your ProductProps definition
 export interface ProductProps {
   id: number;
   name: string;

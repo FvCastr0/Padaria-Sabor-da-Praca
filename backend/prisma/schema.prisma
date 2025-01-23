@@ -16,10 +16,11 @@ model Supplier {
 }
 
 model Product {
-  id          Int           @id @default(autoincrement())
-  name        String        @unique
-  value       Float
-  composition Composition[]
+  id           Int            @id @default(autoincrement())
+  name         String         @unique
+  value        Float
+  composition  Composition[]
+  SalesProduct SalesProduct[]
 }
 
 model RawMaterial {
@@ -37,13 +38,47 @@ model RawMaterial {
 }
 
 model Composition {
-  id            Int         @id @default(autoincrement())
-  quantity      Float
-  rawMaterialId Int
-  productId     Int
-  product       Product     @relation(fields: [productId], references: [id])
-  rawMaterials  RawMaterial @relation(fields: [rawMaterialId], references: [id])
+  id             Int         @id @default(autoincrement())
+  quantity       Float
+  rawMaterialId  Int
+  productId      Int
+  salesProductId Int?
+  product        Product     @relation(fields: [productId], references: [id])
+  rawMaterials   RawMaterial @relation(fields: [rawMaterialId], references: [id])
 
   @@index([productId], map: "Composition_productId_fkey")
   @@index([rawMaterialId], map: "Composition_rawMaterialId_fkey")
+}
+
+model SalesProduct {
+  id        Int     @id @default(autoincrement())
+  unit      Float
+  salesId   Int?
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  sales     Sales?  @relation(fields: [salesId], references: [id])
+
+  @@index([productId], map: "SalesProduct_productId_fkey")
+  @@index([salesId], map: "SalesProduct_salesId_fkey")
+}
+
+model Sales {
+  id            Int            @id @default(autoincrement())
+  day           DateTime       @default(now())
+  month         Int
+  value         Float
+  paymentMethod paymentMethods
+  items         SalesProduct[]
+}
+
+enum paymentMethods {
+  DINHEIRO
+  PIX
+  CREDITO_ELO
+  CREDITO_VISA
+  CREDITO_MASTERCARD
+  VOUCHER
+  DEBITO_ELO
+  DEBITO_VISA
+  DEBITO_MASTERCARD
 }
