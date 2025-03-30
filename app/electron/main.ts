@@ -20,9 +20,12 @@ let win: BrowserWindow | null;
 
 function createWindow() {
   win = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    title: "Padaria sabor da praça",
+    icon: path.join(process.env.VITE_PUBLIC, "logoCFundo.jpg"),
     webPreferences: {
-      preload: path.join(__dirname, "preload.mjs")
+      preload: path.join(__dirname, "preload.mjs"),
+      contextIsolation: true,
+      nodeIntegration: false
     },
     autoHideMenuBar: true
   });
